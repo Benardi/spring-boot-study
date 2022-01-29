@@ -31,12 +31,15 @@ public class Client implements Serializable {
 	private String cpfOrCnpj;
 
 	@ElementCollection
-	@CollectionTable(name="TELEPHONE")
+	@CollectionTable(name = "TELEPHONE")
 	private Set<String> telephones = new HashSet<String>();
-	
+
 	@JsonManagedReference
 	@OneToMany(mappedBy = "client")
 	private List<Address> addresses = new ArrayList<Address>();
+
+	@OneToMany(mappedBy = "client")
+	private List<Purchase> purchases = new ArrayList<Purchase>();
 
 	public Client() {
 	}
@@ -104,6 +107,14 @@ public class Client implements Serializable {
 
 	public void setAddresses(List<Address> addresses) {
 		this.addresses = addresses;
+	}
+
+	public List<Purchase> getPurchases() {
+		return purchases;
+	}
+
+	public void setPurchases(List<Purchase> purchases) {
+		this.purchases = purchases;
 	}
 
 	@Override

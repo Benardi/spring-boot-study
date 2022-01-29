@@ -1,5 +1,6 @@
 package com.benardi.cursomc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +9,24 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.benardi.cursomc.domain.Address;
+import com.benardi.cursomc.domain.BoletoPayment;
 import com.benardi.cursomc.domain.Category;
 import com.benardi.cursomc.domain.City;
 import com.benardi.cursomc.domain.Client;
+import com.benardi.cursomc.domain.CreditCardPayment;
+import com.benardi.cursomc.domain.Payment;
 import com.benardi.cursomc.domain.Product;
+import com.benardi.cursomc.domain.Purchase;
 import com.benardi.cursomc.domain.State;
+import com.benardi.cursomc.domain.enums.PaymentState;
 import com.benardi.cursomc.domain.enums.TypeClient;
 import com.benardi.cursomc.repositories.AddressRepository;
 import com.benardi.cursomc.repositories.CategoryRepository;
 import com.benardi.cursomc.repositories.CityRepository;
 import com.benardi.cursomc.repositories.ClientRepository;
+import com.benardi.cursomc.repositories.PaymentRepository;
 import com.benardi.cursomc.repositories.ProductRepository;
+import com.benardi.cursomc.repositories.PurchaseRepository;
 import com.benardi.cursomc.repositories.StateRepository;
 
 @SpringBootApplication
@@ -36,6 +44,10 @@ public class CursomcApplication implements CommandLineRunner {
 	private ClientRepository clientRepository;
 	@Autowired
 	private AddressRepository addressRepository;
+	@Autowired
+	private PurchaseRepository purchaseRepository;
+	@Autowired
+	private PaymentRepository paymentRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -86,6 +98,22 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		clientRepository.saveAll(Arrays.asList(cl1));
 		addressRepository.saveAll(Arrays.asList(adr1, adr2));
+		
+		/* Purchase and Payment */
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		Purchase purch1 = new Purchase(null, sdf.parse("30/09/2007 10:32"), cl1, adr1);
+		Purchase purch2 = new Purchase(null, sdf.parse("10/10/2017 19:35"), cl1, adr2);
+		
+		Payment pmt1 = new CreditCardPayment(null, PaymentState.PAID, purch1, 6);
+		purch1.setPayment(pmt1);
+		
+		Payment pmt2 = new BoletoPayment(null, PaymentState.PENDING, purch2, sdf.parse("20/10/2017 00:00"), null);
+		purch2.setPayment(pmt2);
+		
+		cl1.getPurchases().addAll(Arrays.asList(purch1, purch2));
+		
+		purchaseRepository.saveAll(Arrays.asList(purch1, purch2));
+		paymentRepository.saveAll(Arrays.asList(pmt1, pmt2));
 	}
 
 }
