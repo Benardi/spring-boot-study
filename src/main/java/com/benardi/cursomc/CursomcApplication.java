@@ -7,12 +7,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.benardi.cursomc.domain.Address;
 import com.benardi.cursomc.domain.Category;
 import com.benardi.cursomc.domain.City;
+import com.benardi.cursomc.domain.Client;
 import com.benardi.cursomc.domain.Product;
 import com.benardi.cursomc.domain.State;
+import com.benardi.cursomc.domain.enums.TypeClient;
+import com.benardi.cursomc.repositories.AddressRepository;
 import com.benardi.cursomc.repositories.CategoryRepository;
 import com.benardi.cursomc.repositories.CityRepository;
+import com.benardi.cursomc.repositories.ClientRepository;
 import com.benardi.cursomc.repositories.ProductRepository;
 import com.benardi.cursomc.repositories.StateRepository;
 
@@ -27,6 +32,10 @@ public class CursomcApplication implements CommandLineRunner {
 	private StateRepository stateRepository;
 	@Autowired
 	private CityRepository cityRepository;
+	@Autowired
+	private ClientRepository clientRepository;
+	@Autowired
+	private AddressRepository addressRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -65,6 +74,18 @@ public class CursomcApplication implements CommandLineRunner {
 
 		stateRepository.saveAll(Arrays.asList(est1, est2));
 		cityRepository.saveAll(Arrays.asList(c1, c2, c3));
+
+        /* Client and Address */		
+		Client cl1 = new Client(null, "Maria Silva", "maria@gmail.com", "36378912377", TypeClient.NATURALPERSON);
+		cl1.getTelephones().addAll(Arrays.asList("27363323", "93838393"));
+
+		Address adr1 = new Address(null, "38220834", "Jardim", "Rua Flores", "300", "Apto 303", cl1, c1);
+		Address adr2 = new Address(null, "39777012", "Centro", "Avenida Matos", "105", "Sala 800", cl1, c2);
+
+		cl1.getAddresses().addAll(Arrays.asList(adr1, adr2));
+		
+		clientRepository.saveAll(Arrays.asList(cl1));
+		addressRepository.saveAll(Arrays.asList(adr1, adr2));
 	}
 
 }
