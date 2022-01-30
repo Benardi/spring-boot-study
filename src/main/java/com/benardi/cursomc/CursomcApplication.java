@@ -14,6 +14,7 @@ import com.benardi.cursomc.domain.Category;
 import com.benardi.cursomc.domain.City;
 import com.benardi.cursomc.domain.Client;
 import com.benardi.cursomc.domain.CreditCardPayment;
+import com.benardi.cursomc.domain.ItemPurchase;
 import com.benardi.cursomc.domain.Payment;
 import com.benardi.cursomc.domain.Product;
 import com.benardi.cursomc.domain.Purchase;
@@ -24,6 +25,7 @@ import com.benardi.cursomc.repositories.AddressRepository;
 import com.benardi.cursomc.repositories.CategoryRepository;
 import com.benardi.cursomc.repositories.CityRepository;
 import com.benardi.cursomc.repositories.ClientRepository;
+import com.benardi.cursomc.repositories.ItemPurchaseRepository;
 import com.benardi.cursomc.repositories.PaymentRepository;
 import com.benardi.cursomc.repositories.ProductRepository;
 import com.benardi.cursomc.repositories.PurchaseRepository;
@@ -48,6 +50,8 @@ public class CursomcApplication implements CommandLineRunner {
 	private PurchaseRepository purchaseRepository;
 	@Autowired
 	private PaymentRepository paymentRepository;
+	@Autowired
+	private ItemPurchaseRepository itemPurchaseRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -114,6 +118,20 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		purchaseRepository.saveAll(Arrays.asList(purch1, purch2));
 		paymentRepository.saveAll(Arrays.asList(pmt1, pmt2));
+		
+		ItemPurchase ip1 = new ItemPurchase(purch1, p1, 0.00, 1, 2000.00);
+		ItemPurchase ip2 = new ItemPurchase(purch1, p3, 0.00, 2, 80.00);
+		ItemPurchase ip3 = new ItemPurchase(purch2, p2, 100.00, 1, 800.00);
+		
+		purch1.getItems().addAll(Arrays.asList(ip1, ip2));
+		purch2.getItems().addAll(Arrays.asList(ip3));
+		
+		p1.getItems().addAll(Arrays.asList(ip1));
+		p2.getItems().addAll(Arrays.asList(ip3));
+		p3.getItems().addAll(Arrays.asList(ip2));
+		
+		itemPurchaseRepository.saveAll(Arrays.asList(ip1,ip2,ip3));
+		
 	}
 
 }
