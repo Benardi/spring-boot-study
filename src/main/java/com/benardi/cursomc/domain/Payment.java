@@ -11,6 +11,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.benardi.cursomc.domain.enums.PaymentState;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -22,6 +23,7 @@ public abstract class Payment implements Serializable {
 	private Integer id;
 	private Integer state;
 
+	@JsonBackReference
 	@OneToOne
 	@JoinColumn(name = "purchase_id")
 	@MapsId
