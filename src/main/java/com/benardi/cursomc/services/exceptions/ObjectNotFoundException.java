@@ -1,4 +1,4 @@
-package com.benardi.cursomc.exceptions;
+package com.benardi.cursomc.services.exceptions;
 
 public class ObjectNotFoundException extends RuntimeException {
 

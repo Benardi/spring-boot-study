@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.benardi.cursomc.domain.Purchase;
-import com.benardi.cursomc.exceptions.ObjectNotFoundException;
 import com.benardi.cursomc.repositories.PurchaseRepository;
+import com.benardi.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
 public class PurchaseService {
